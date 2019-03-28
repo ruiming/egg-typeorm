@@ -16,10 +16,10 @@ export function formatCode(text: string) {
   })
 }
 
-async function connectDB(app: Application) {
-  const config = app.config.typeorm
+async function connectDB(app: Application, config: any) {
   const connection = await createConnection(config)
   app.context.connection = connection
+  return connection
 }
 
 function capitalizeFirstLetter(str: string) {
@@ -137,15 +137,19 @@ async function loadEntityAndModel(app: Application) {
   }
 }
 
-export default async (app: Application) => {
-  const config = app.config.typeorm
+export default app => {
+  app.addSingleton('typeorm', createTypeORM)
+}
+
+async function createTypeORM (config: any, app: Application) {
   if (!config) {
     throw new Error('please config typeorm in config file')
   }
+  const connection = connectDB(app, config)
 
   app.beforeStart(async () => {
     try {
-      await connectDB(app)
+      await connection
       // if (app.config.env === 'local') {
         watchEntity(app)
       // }
@@ -154,4 +158,6 @@ export default async (app: Application) => {
       app.logger.info(JSON.stringify(error))
     }
   })
+
+  return connection
 }

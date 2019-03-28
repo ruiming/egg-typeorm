@@ -39,17 +39,19 @@ const plugin: EggPlugin = {
 ```ts
 // {app_root}/config/config.default.ts
 config.typeorm = {
-  type: 'mysql',
-  host: 'localhost',
-  port: 3306,
-  username: 'test',
-  password: 'test',
-  database: 'test',
-  synchronize: true,
-  logging: false,
-  entities: ['app/entity/**/*.ts'],
-  migrations: ['app/migration/**/*.ts'],
-  subscribers: ['app/subscriber/**/*.ts'],
+  client: {
+    type: 'mysql',
+    host: 'localhost',
+    port: 3306,
+    username: 'test',
+    password: 'test',
+    database: 'test',
+    synchronize: true,
+    logging: false,
+    entities: ['app/entity/**/*.ts'],
+    migrations: ['app/migration/**/*.ts'],
+    subscribers: ['app/subscriber/**/*.ts'],
+  }
 }
 ```
 
